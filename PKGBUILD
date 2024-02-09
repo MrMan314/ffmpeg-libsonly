@@ -6,7 +6,7 @@
 
 pkgname=ffmpeg
 pkgver=6.1.1
-pkgrel=3
+pkgrel=4
 epoch=2
 pkgdesc='Complete solution to record, convert and stream audio and video'
 arch=(x86_64)
@@ -93,6 +93,7 @@ makedepends=(
   mesa
   nasm
   opencl-headers
+  vapoursynth
   vulkan-headers
 )
 optdepends=(
@@ -102,6 +103,7 @@ optdepends=(
   'ladspa: LADSPA filters'
   'nvidia-utils: Nvidia NVDEC/NVENC support'
   'onevpl-intel-gpu: Intel QuickSync support'
+  'vapoursynth: VapourSynth support'
 )
 provides=(
   libavcodec.so
