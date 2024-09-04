@@ -79,6 +79,7 @@ depends=(
   x265
   xvidcore
   xz
+  zeromq
   zimg
   zlib
 )
@@ -205,6 +206,7 @@ build() {
     --enable-libxml2 \
     --enable-libxvid \
     --enable-libzimg \
+    --enable-libzmq \
     --enable-nvdec \
     --enable-nvenc \
     --enable-opencl \
@@ -243,6 +245,7 @@ package() {
     libx265.so
     libxvidcore.so
     libzimg.so
+    libzmq.so
   )
 
   make DESTDIR="${pkgdir}" -C ffmpeg install install-man
