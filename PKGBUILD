@@ -4,7 +4,7 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 # Contributor: Paul Mattal <paul@archlinux.org>
 
-pkgname=ffmpeg
+pkgname=ffmpeg-libsonly
 pkgver=7.1.1
 pkgrel=5
 epoch=2
@@ -157,7 +157,11 @@ build() {
   cd ffmpeg
   ./configure \
     --prefix=/usr \
+    --incdir=/usr/include/ffmpeg${pkgver} \
+    --libdir=/usr/lib/ffmpeg${pkgver} \
     --disable-debug \
+    --disable-doc \
+    --disable-programs \
     --disable-static \
     --disable-stripping \
     --enable-amf \
@@ -228,8 +232,8 @@ build() {
     --enable-version3 \
     --enable-vulkan
   make
-  make tools/qt-faststart
-  make doc/ff{mpeg,play}.1
+#  make tools/qt-faststart
+#  make doc/ff{mpeg,play}.1
 }
 
 package() {
@@ -259,9 +263,19 @@ package() {
     libzimg.so
     libzmq.so
   )
+  mkdir -p "${pkgdir}"/usr/bin/
+  make DESTDIR="${pkgdir}" -C ffmpeg install
+  cd "${pkgdir}"
 
-  make DESTDIR="${pkgdir}" -C ffmpeg install install-man
-  install -Dm 755 ffmpeg/tools/qt-faststart "${pkgdir}"/usr/bin/
+  local f
+  for f in usr/lib/ffmpeg${pkgver}/*; do
+    if [[ $f == *.so ]]; then
+      ln -srf -- usr/lib/"$(readlink "$f")" "$f"
+    elif [[ ! -d $f ]]; then
+      mv "$f" usr/lib
+	fi
+  done
+  rm -r usr/share
 }
 
 # vim: ts=2 sw=2 et:
